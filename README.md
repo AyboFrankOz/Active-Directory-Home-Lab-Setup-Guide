@@ -70,3 +70,63 @@ Now, we can reconnect the network in the VMware settings to allow the OS to perf
 When you log in to the server, a blue banner will pop up asking if you want to allow this PC to be discoverable by other PC's and devices on this network. Click yes.
 
 # Step 6 Deploying the Server as a Domain Controller
+If the Server Manager did not automatically start, click on Start and type "Server Manager", then run it. From Server Manager's menu bar, click on Manage > "Add Roles and Features". 
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/c62033d6157c01996ccad6a624bef808d73b76b9/images/16.%20DC%20Setup.PNG)
+
+"Add Roles and Features Wizard" will start. Click Next to begin.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/16.%20DC%20Setup%20(2).PNG)
+
+As our Server DC01 will be automatically selected from the list, click Next.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/16.%20DC%20Setup%20(3).PNG)
+
+Click on the "Active Directory Domain Services".
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/16.%20DC%20Setup%20(4).PNG)
+
+Another information box will appear displaying the roles and features that are about to be installed. Click "Add features".
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/16.%20DC%20Setup%20(5).PNG)
+
+Click Next.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/16.%20DC%20Setup%20(6).PNG)
+
+If "Group Policy Management" is unchecked, check it, then click Next.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/16.%20DC%20Setup%20(7).PNG)
+
+Click Next.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/16.%20DC%20Setup%20(8).PNG)
+
+Click on "Restart the destination server automatically if required" and "Install" to begin. 
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/16.%20DC%20Setup%20(9).PNG)
+
+Once the installation is completed, before closing the wizard, click on "Promote this server to a domain controller".
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/16.%20DC%20Setup%20(10).PNG)
+
+Click on "Add a new forest" and type any domain name. In our case, "lab.local". Next.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/16.%20DC%20Setup%20(11).PNG)
+
+Type a password for Directory Services Restore Mode. Next.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/16.%20DC%20Setup%20(12).PNG)
+
+When installing Active Directory Domain Services (AD DS), the Domain Name System (DNS) Server role is installed automatically. DNS is responsible for locating domain controllers and enabling communication between clients and services within the domain. Without a properly configured DNS infrastructure, core Active Directory features would not work. As Active Directory relies heavily on DNS to function properly, the installation of DNS ensures that the domain controller is immediately fully operational. Click Next to approve it.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/16.%20DC%20Setup%20(13).PNG)
+
+After verifying the NetBIOS name, click Next.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/16.%20DC%20Setup%20(14).PNG)
+
+Confirm the paths, click Next.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/16.%20DC%20Setup%20(15).PNG)
+
+Review the options. You can also click on the "View Script" button to export these settings to a Windows PowerShell script to automate the installation. But we are going to click on Next.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/16.%20DC%20Setup%20(16).PNG)
+
+On the next page, the configuration wizard will check the prerequisites. Once it is done, as long as we don't see errors that are marked with red signs, we can click on the "Install" button. If we have errors, we have to fix them before continuing.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/16.%20DC%20Setup%20(17).PNG)
+
+After the installation is completed, the server will be restarted.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/16.%20DC%20Setup%20(18).PNG)
+
+Once it is back, you will notice that the logon screen has changed. Our user name was Administrator before, meaning the local admin. After DC is set, we are signing in with the Domain Administrator, LAB/Administrator, in our case. This is how we are going to understand that we are logging into a domain.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/17.%20Welcome%20to%20your%20domain.PNG)
+
+Welcome to your domain!
+
+# Step 7 Creating a User with Admin Rights

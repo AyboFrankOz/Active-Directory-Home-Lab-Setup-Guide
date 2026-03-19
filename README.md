@@ -189,9 +189,90 @@ Accept the Software License Agreement and click Next. Click on "Custom: Install 
 Continue with limited setup. Type a user name and create a new password. You will be on your desktop.
 ![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/505921a5ab76ea6d025c8201b36c9db76f34faa8/images/Windows%2010%20setup%20(4).PNG)
 
-Don't forget to install VMware tools for a better experience. 
+Don't forget to install VMware tools for a better experience 
 ![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/505921a5ab76ea6d025c8201b36c9db76f34faa8/images/Windows%2010%20setup%20(5).PNG)
 
+...and activate the network from VM settings: VM > Settings. Network Adapter > Device Status Connected and Connect at power on
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/a2d49e9c0c59f6b31973388a1cd0b0113eef75f4/images/15.%20Network%20Adapter%20Settings.PNG)
+
 # Step 8 Connecting Windows 10 to the Domain Controller
+In a real network environment, multiple computers are deployed and managed simultaneously. By default, Windows assigns randomly generated names (such as DESKTOP-UOQAB7) to newly installed machines, which can make identification and management difficult. For this reason, it is important to rename each computer using a consistent and meaningful naming convention, such as DC01, CLIENT01, etc. For this lab, we will rename this Windows 10 machine to "helpdesk" as this machine will be "used" by a technical support.
 
+Right-click on Start > System.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/bd425e3b7ddfda352060c02edab25e6e8e6f339b/images/21.%20Changing%20PC%20Name%20(1).PNG)
 
+The About page will open. Then click on "Rename this PC".
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/bd425e3b7ddfda352060c02edab25e6e8e6f339b/images/21.%20Changing%20PC%20Name%20(2).PNG)
+
+Type "helpdesk" > Next. The computer should restart itself.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/bd425e3b7ddfda352060c02edab25e6e8e6f339b/images/21.%20Changing%20PC%20Name%20(3).PNG)
+
+To connect "helpdesk" to the DC, we need to know the DC's network details* and reconfigure "helpdesk" network settings. Click on the Windows Server 2022 tab on VMware.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/2c5a8ffa60edc1b9f0db0393844aa6bc9c9a4d81/images/22.%20Sign%20back%20into%20DC.PNG)
+
+To sign in with a different account in a domain environment, select “Other user” on the login screen. This option is located below the currently signed-in account (e.g., LAB\Administrator) on the left-hand side. After selecting “Other user”, you can manually enter the credentials of another account.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/c42a4a12f7ba36eb15fb73dcf0e1cc548ba39567/images/23.%20Other%20user.PNG)
+
+After signing in with an authorized account, click on Start and type "cmd" to run Command Prompt (cmd). In cmd, type "ipconfig" to see network details. Note the IP address- 192.168.67.128 in our case. 
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/96d587355ea997fe0ddda1c7bbe5a5decc2111c9/images/24.%20IP%20of%20DC.PNG)
+
+Go back to the Windows 10 machine. Click start and type "ncpa.cpl" to open Network Connections.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/646ad26edd232cdfaf21318fb5ecc790ffa6b443/images/25.%20Reconfiguring%20Win%2010s%20IP%20%20(1).PNG)
+
+Alternatively, you can open Network Connections via Start > type "Control Panel" to open it > Click "View network status and tasks" under Network and Internet > From the left side bar click "Change adapter settings". Right-click on Ethernet0 then "Properties".
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/646ad26edd232cdfaf21318fb5ecc790ffa6b443/images/25.%20Reconfiguring%20Win%2010s%20IP%20%20(2).PNG)
+
+Click on Internet Protocol Version 4 (TCP/IPv4) and "Properties".
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/646ad26edd232cdfaf21318fb5ecc790ffa6b443/images/25.%20Reconfiguring%20Win%2010s%20IP%20%20(3).PNG)
+
+Click on "Use the following DNS server addresses" then type DC's IP address (192.168.67.128) as Preferred DNS server and 8.8.8.8 as Alternative DNS server. 8.8.8.8 and 8.8.4.4 are public DNS recursive servers provided by Google, designed to offer fast, secure, and reliable DNS resolution.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/646ad26edd232cdfaf21318fb5ecc790ffa6b443/images/25.%20Reconfiguring%20Win%2010s%20IP%20%20(4).PNG)
+
+Right-click on Start > System. Scroll down and click "Rename this PC (advanced)". Click "Change"
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/40371578feecce441ee5bc42c6dafc559db24e56/images/26.%20Adding%20Win10%20to%20DC%20(1).PNG)
+
+If we don't know or forget the domain we are on, we can type "echo %USERDNSDOMAIN%" on cmd to see the domain information.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/65228c57f86027cc14bc033f1ab6bb9e6bd24073/images/26.%20Adding%20Win10%20to%20DC%20(2).PNG)
+
+Click on "Domain" under the Member of section and type the domain name "lab.local" in our case. Click OK.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/65228c57f86027cc14bc033f1ab6bb9e6bd24073/images/26.%20Adding%20Win10%20to%20DC%20(3).PNG)
+
+To approve our change, we need to use admin credentials.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/65228c57f86027cc14bc033f1ab6bb9e6bd24073/images/26.%20Adding%20Win10%20to%20DC%20(4).PNG)
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/65228c57f86027cc14bc033f1ab6bb9e6bd24073/images/26.%20Adding%20Win10%20to%20DC%20(5).PNG)
+
+# Step 9 Installing Remote Server Administration Tools
+Remote Server Administration Tools (RSAT) enable IT administrators to remotely manage Windows Server roles and features directly from a Windows 10 or 11 workstation. With RSAT installed, administrative tasks such as managing Active Directory users and groups, Group Policy, and other server roles can be performed without needing direct access to the server. This reflects real-world IT support practices, where administrators manage infrastructure from their own machines rather than logging into servers interactively.
+
+To install RSAT, right-click on Start and select Settings.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/b219ad1e3e846252bdf634598e58921056cdb98e/images/27.%20RSAT%20tools%20installation%20(1).PNG)
+
+Type "Manage optional features" in the search box.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/b219ad1e3e846252bdf634598e58921056cdb98e/images/27.%20RSAT%20tools%20installation%20(2).PNG)
+
+Type "rsat" on the search box, select "RSAT: Active Directory Domain Services and Lightweight Directory Services Tools" and click Install.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/b219ad1e3e846252bdf634598e58921056cdb98e/images/27.%20RSAT%20tools%20installation%20(3).PNG)
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/b219ad1e3e846252bdf634598e58921056cdb98e/images/27.%20RSAT%20tools%20installation%20(4).PNG)
+
+After installation is completed. Click on Start > type "adm" > Windows Administrative Tools.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/b219ad1e3e846252bdf634598e58921056cdb98e/images/27.%20RSAT%20tools%20installation%20(5).PNG)
+
+You can see the Active Directory features. Click on "Active Directory Users and Computers". Now you have remote access.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/b219ad1e3e846252bdf634598e58921056cdb98e/images/27.%20RSAT%20tools%20installation%20(6).PNG)
+
+# Step 10 Testing
+To test RSAT, let's create a user from our Windows 10 (helpdesk) machine.
+
+In Active Directory Users and Computers, click on Users, which is located on the left side - under our domain tree. Then click on the "Create a new user in the current container" icon.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/6bcdc5458e2345c7f5a5b3fe8d4b2197444b2362/images/28.%20Test%20Creating%20a%20User%20(1).PNG)
+
+As previously, fill out "First Name", "Last Name" and "User Logon Name". Next.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/6bcdc5458e2345c7f5a5b3fe8d4b2197444b2362/images/28.%20Test%20Creating%20a%20User%20(2).PNG)
+
+Create a password for this user. Check "Password never expires" if you don't the user's password expire.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/6bcdc5458e2345c7f5a5b3fe8d4b2197444b2362/images/28.%20Test%20Creating%20a%20User%20(3).PNG)
+
+The new user was created via RSAT from the Windows 10 (helpdesk) machine.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/22c0650ccefd86e5a5612d4101123889b64582c0/images/28.%20Test%20Creating%20a%20User%20(4).png)
+
+*In real-world environments, a DC is typically configured with a static IP address. This ensures that critical services such as DNS and Active Directory remain consistently accessible, avoiding issues that can occur when DHCP assigns a new (dynamic) IP address. If a Domain Controller’s IP address changes, clients may fail to locate domain services, leading to authentication and connectivity problems. For the purpose of this basic lab, the IP configuration has been left as dynamic to simplify the setup process. While this is acceptable in a controlled lab environment, using a static IP is considered a better practice in real-world environments.

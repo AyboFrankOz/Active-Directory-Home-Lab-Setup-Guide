@@ -124,9 +124,74 @@ On the next page, the configuration wizard will check the prerequisites. Once it
 After the installation is completed, the server will be restarted.
 ![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/16.%20DC%20Setup%20(18).PNG)
 
-Once it is back, you will notice that the logon screen has changed. Our user name was Administrator before, meaning the local admin. After DC is set, we are signing in with the Domain Administrator, LAB/Administrator, in our case. This is how we are going to understand that we are logging into a domain.
+After promoting the server to a Domain Controller, you will notice a change in the logon screen. Previously, the default login account was the local Administrator, displayed simply as "Administrator". However, once Active Directory is configured, the logon format changes to reflect the domain context. You will now see the username displayed as "LAB\Administrator". This format (DomainName\Username) indicates that you are signing in to a domain rather than the local machine.
 ![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/d7220aaaee356189457965cef2afeba1fd72673a/images/17.%20Welcome%20to%20your%20domain.PNG)
 
-Welcome to your domain!
+Log in with the Domain Admin account, and welcome to your domain!
 
 # Step 7 Creating a User with Admin Rights
+Domain Admin accounts have full control over the entire Active Directory environment. Using a Domain Admin account for daily tasks is strongly discouraged, as it introduces significant security risks. If such an account is used on a regular endpoint and that endpoint becomes compromised, through malware or phishing, an attacker could gain unrestricted access to the entire network. In real-world enterprise environments, multiple accounts with different levels of authorization are used to reduce security risks. This approach, privilege separation, reduces the risk of full system compromise.
+
+However, for the purpose of this basic lab, we will create an additional user account with Domain Admin privileges. From the Server Manager Dashboard menu bar, click on Tools > Active Directory Users and Computers.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/cf2d8fecc9319a92cb3216ddcafcd74bac09d783/images/18.%20Creating%20a%20User%20with%20Admin%20Rights%20(1).PNG)
+
+Right-click on the domain (local.lab) > New > Organizational Unit
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/cf2d8fecc9319a92cb3216ddcafcd74bac09d783/images/18.%20Creating%20a%20User%20with%20Admin%20Rights%20(2).PNG)
+
+Name the folder "Admins" and click OK.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/cf2d8fecc9319a92cb3216ddcafcd74bac09d783/images/18.%20Creating%20a%20User%20with%20Admin%20Rights%20(3).PNG)
+
+Click the Admins folder to open it. It will be empty. Right-click inside New > User.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/cf2d8fecc9319a92cb3216ddcafcd74bac09d783/images/18.%20Creating%20a%20User%20with%20Admin%20Rights%20(4).PNG)
+
+Fill out "First Name", "Last Name" and "User Logon Name". Next.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/cf2d8fecc9319a92cb3216ddcafcd74bac09d783/images/18.%20Creating%20a%20User%20with%20Admin%20Rights%20(5).PNG)
+
+Create a password for this user. You can uncheck "User must change password at next logon" if you don't want to change your password after your first login. Next.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/cf2d8fecc9319a92cb3216ddcafcd74bac09d783/images/18.%20Creating%20a%20User%20with%20Admin%20Rights%20(6).PNG)
+
+Finish. We have just created a user.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/cf2d8fecc9319a92cb3216ddcafcd74bac09d783/images/18.%20Creating%20a%20User%20with%20Admin%20Rights%20(7).PNG)
+
+But this is a user with no authorization. To give the authorization, right-click on the user and select Properties.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/cf2d8fecc9319a92cb3216ddcafcd74bac09d783/images/18.%20Creating%20a%20User%20with%20Admin%20Rights%20(8).PNG)
+
+Click on "Member Of" tab. Then Click on "Add".
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/cf2d8fecc9319a92cb3216ddcafcd74bac09d783/images/18.%20Creating%20a%20User%20with%20Admin%20Rights%20(9).PNG)
+
+Type "Domain Admins" then Click on "OK".
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/cf2d8fecc9319a92cb3216ddcafcd74bac09d783/images/18.%20Creating%20a%20User%20with%20Admin%20Rights%20(10).PNG)
+
+Click on "Apply". Now, this user has Domain Admin rights.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/ed62b4a90a96fa254bdeefc8e70631f8a886ffdb/images/18.%20Creating%20a%20User%20with%20Admin%20Rights%20(11).PNG)
+
+# Step 8 Setting up Windows 10
+Just as we set up Windows Server 2022 previously, click on "Create a New Virtual Machine" on the VMware Workstation Pro 17 Dashboard. Proceed with the wizard: "Typical" > "I will install the operating system later" > Guest operating system: "Microsoft Windows"; Version: "Windows 10 x64" > Virtual machine name: "Helpdesk" (You can type anything you like) > Maximum disk size: "60 GB" & "Split virtual disk into multiple files" > Before clicking on "Finish" click on "Customize Hardware".
+
+Increase the Memory to "4 GB (4096 MB)" from the Memory tab. Increase the number of cores  per processor to 2 from the Processors tab. From the CD/DVD (SATA) tab under Connection, click on "Use ISO image file" then Browse. Select the Windows Server 10 (ISO) that was downloaded. 
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/c10696a2a9aa22bc2a9c15b4d8a219010d53bfde/images/19.%20Windows%2010%20preSetup.PNG)
+
+From the Network Adapter tab, uncheck "Connect at power on" option. This prevents Windows from attempting to download updates during installation and allows you to bypass the mandatory Microsoft account requirement. 
+
+Once the environment is created, you will see that another tab, "Helpdesk", was created next to our server "Windows Server 2022". As before, click on "Power on this Virtual Machine" to begin the Operating System (OS) installation. Quickly press "any key" when prompted to boot from the CD/ISO. 
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/a907e39874a440d614d389a47763528283a8d49c/images/4.%20%20Initial%20Boot%20-%20press%20any%20key%20prompt.PNG)
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/a907e39874a440d614d389a47763528283a8d49c/images/5.%20Setup%20starts.PNG)
+
+Select "Language, Time and currency format, Keyboard" then click Next. Click on "Install Now". Click on "I don't have a product key"
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/505921a5ab76ea6d025c8201b36c9db76f34faa8/images/Windows%2010%20setup%20(1).PNG)
+
+Only the Pro, Education, and Enterprise editions of Windows 10/11 can be joined to a domain. The Active Directory domain is not supported in Home Editions; thus, make sure to select the Pro version. Next.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/505921a5ab76ea6d025c8201b36c9db76f34faa8/images/Windows%2010%20setup%20(2).PNG)
+
+Accept the Software License Agreement and click Next. Click on "Custom: Install Windows only (advanced)" as we are installing Windows for the first time. Once the installation finishes, it will ask for our region. Select your region and click next. It will ask you to connect to a network. Click "I don't have Internet"
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/505921a5ab76ea6d025c8201b36c9db76f34faa8/images/Windows%2010%20setup%20(3).PNG)
+
+Continue with limited setup. Type a user name and create a new password. You will be on your desktop.
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/505921a5ab76ea6d025c8201b36c9db76f34faa8/images/Windows%2010%20setup%20(4).PNG)
+
+Don't forget to install VMware tools for a better experience. 
+![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/505921a5ab76ea6d025c8201b36c9db76f34faa8/images/Windows%2010%20setup%20(5).PNG)
+
+# Step 8 Connecting Windows 10 to the Domain Controller
+
+

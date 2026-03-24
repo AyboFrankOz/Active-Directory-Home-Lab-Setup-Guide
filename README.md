@@ -275,4 +275,27 @@ Create a password for this user. Check "Password never expires" if you don't the
 The new user was created via RSAT from the Windows 10 (helpdesk) machine.
 ![Image Alt](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/22c0650ccefd86e5a5612d4101123889b64582c0/images/28.%20Test%20Creating%20a%20User%20(4).png)
 
-*In real-world environments, a DC is typically configured with a static IP address. This ensures that critical services such as DNS and Active Directory remain consistently accessible, avoiding issues that can occur when DHCP assigns a new (dynamic) IP address. If a Domain Controller’s IP address changes, clients may fail to locate domain services, leading to authentication and connectivity problems. For the purpose of this basic lab, the IP configuration has been left as dynamic to simplify the setup process. While this is acceptable in a controlled lab environment, using a static IP is considered a better practice in real-world environments.
+*In real-world environments, a DC is typically configured with a static IP address. This ensures that critical services such as DNS and Active Directory remain consistently accessible, avoiding issues that can occur when DHCP assigns a new (dynamic) IP address. If a Domain Controller’s IP address changes, clients may fail to locate domain services, leading to authentication and connectivity problems. 
+
+For example, when we log in with a new user...
+![TroubleShooting](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/a5114cd2b8105220cb2d16a242e213ffd88acbf6/images/Troubleshooting%20(1).PNG)
+
+...we may receive the following error. Since we did not set a static IP address for the DC, the IP address expired, and the DHCP server (our router in this home lab scenario) gave a new one. Due to this IP change, the communication between the DC and this PC is lost. Therefore, it cannot validate the new user's credentials. Luckily, to fix this issue, we can log in with another user who was validated on this PC before. 
+![TroubleShooting](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/a5114cd2b8105220cb2d16a242e213ffd88acbf6/images/Troubleshooting%20(2).PNG)
+
+When we type "ipconfig" in CMD on DC, we can see that the IP address of DC is 192.168.67.149. (It was 192.168.67.128 when we set the whole lab up. The IP address was changed as it had expired.) 
+![TroubleShooting](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/a5114cd2b8105220cb2d16a242e213ffd88acbf6/images/Troubleshooting%20(3).PNG)
+
+From our Helpdesk PC (with an admin account), go to Network Settings (Click on Start > type "Ethernet Settings" and click on "Change Adapter Options"). Right-click on Ethernet > Properties. Click on "Internet Protocol Version  4 (TCP/IPv4) then "Properties".
+![TroubleShooting](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/a5114cd2b8105220cb2d16a242e213ffd88acbf6/images/Troubleshooting%20(4).PNG)
+
+Update the IP address and click on OK.
+![TroubleShooting](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/a5114cd2b8105220cb2d16a242e213ffd88acbf6/images/Troubleshooting%20(5).PNG)
+
+Log out and use the same account again.
+![TroubleShooting](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/a5114cd2b8105220cb2d16a242e213ffd88acbf6/images/Troubleshooting%20(6).PNG)
+
+We are in.
+![TroubleShooting](https://github.com/AyboFrankOz/Active-Directory-Home-Lab-Setup-Guide/blob/a5114cd2b8105220cb2d16a242e213ffd88acbf6/images/Troubleshooting%20(7).PNG)
+
+If we don't want to do this troubleshooting every time the DC's IP changes, we should set a static IP for the DC. However, for the purpose of this basic lab, the IP configuration has been left as dynamic to simplify the setup process. While this is acceptable in a controlled lab environment, using a static IP is considered a better practice in real-world environments.
